@@ -1,0 +1,91 @@
+import java.util.Scanner;
+
+// HeapNode class
+class HeapNode {
+    public int id,priority;
+
+    public HeapNode(int id, int priority) {
+        this.id = id;
+        this.priority = priority;
+    }
+}
+public class Solution {
+//    swaps the nodes in the heap
+    public static void swap(HeapNode[] heap,int pos1,int pos2) {
+        int id = heap[pos1].id;
+        heap[pos1].id = heap[pos2].id;
+        heap[pos2].id = id;
+        int priority = heap[pos1].priority;
+        heap[pos1].priority = heap[pos2].priority;
+        heap[pos2].priority = priority;
+    }
+//    heapifies the heap tree
+    public static void heapify(HeapNode[] heap,int pos,int size) {
+        int left = 2 * pos + 1;
+        int right = 2 * pos + 2;
+        int min = pos;
+        if(left < size && heap[left].priority < heap[min].priority) {
+            min = left;
+        }
+        if(right < size && heap[right].priority < heap[min].priority) {
+            min = right;
+        }
+        if(min != pos) {
+            swap(heap,min,pos);
+            heapify(heap,min,size);
+        }
+    }
+
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+//        reads the n
+        int n = sc.nextInt();
+//        creates the heap array
+        HeapNode[] heap = new HeapNode[n];
+        int size = 0,opt = 0;
+//        runs until the 4 is entered
+        do {
+//            reads the option
+            opt = sc.nextInt();
+//            if the option is 1 inserts the id,priority into heap and calls the heapify
+            if(opt == 1) {
+                int id = sc.nextInt();
+                int priority = sc.nextInt();
+                heap[size++] = new HeapNode(id,priority);
+                for(int i = size / 2;i >= 0;i--) {
+                    heapify(heap,i,size);
+                }
+
+            }
+            //            if the option is 2 chenges the priority in the heap and calls the heapify
+            else if(opt == 2) {
+                int id = sc.nextInt();
+                int priority = sc.nextInt();
+                for(int i = 0;i<size;i++) {
+                    if(heap[i].id == id) {
+                        heap[i].priority = priority;
+                        break;
+                    }
+                }
+                for(int i = size / 2;i >= 0;i--) {
+                    heapify(heap,i,size);
+                }
+
+            }
+//            if the option is 3 then prints the minimum node
+            else if(opt == 3) {
+                System.out.println(heap[0].id + " " + heap[0].priority);
+                swap(heap,0,size - 1);
+                --size;
+                for(int i = size / 2;i >= 0;i--) {
+                    heapify(heap,i,size);
+                }
+
+
+            }
+
+        }while(opt != 4);
+    }
+   
+}
